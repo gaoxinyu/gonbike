@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon.eot?1oy23r');
+  src:  url('../fonts/icomoon.eot?1oy23r#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?1oy23r') format('truetype'),
+    url('../fonts/icomoon.woff?1oy23r') format('woff'),
+    url('../fonts/icomoon.svg?1oy23r#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-customer-service:before {
+  content: "\e901";
+}
+.icon-Cycling-operations:before {
+  content: "\e902";
+}
+.icon-Bicycle-Management:before {
+  content: "\e903";
+}
+.icon-User-basic-information:before {
+  content: "\e904";
+}
+.icon-Credit-points:before {
+  content: "\e905";
+}
+.icon-Transaction-details:before {
+  content: "\e906";
+}
+.icon-Payment-details:before {
+  content: "\e907";
+}
+.icon-Bicycle-storage:before {
+  content: "\e908";
+}
+.icon-app-management:before {
+  content: "\e909";
+}
+.icon-Account-management:before {
+  content: "\e90a";
+}
+.icon-1:before {
+  content: "\e900";
+}
+

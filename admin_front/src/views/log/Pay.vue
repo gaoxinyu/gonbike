@@ -1,0 +1,186 @@
+<template>
+  <div class="pay-log">
+    <div class="box box-info">
+      <div class="box-header with-border">
+        {{ $t('pay.query.title') }}
+      </div>
+      <div class="box-body">
+        <el-form label-position="left" label-width="90px">
+          <div class="row">
+            <div class="col-md-3 col-xs-12">
+              <el-form-item :label="$t('pay.query.countryId')">
+                <el-select v-model="query.countryId">
+                  <el-option
+                    v-for="item in areaOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </div>
+
+            <div class="col-md-3 col-xs-12">
+              <el-form-item :label="$t('pay.query.createdAt')">
+                <el-date-picker
+                  v-model="createdAt"
+                  type="daterange"
+                  :placeholder="$t('pay.query.chooseTime')"
+                  @change="handleCreatedAt"
+                  style="width: 100%">
+                </el-date-picker>
+              </el-form-item>
+            </div>
+
+            <div class="col-md-3 col-xs-12">
+              <el-form-item :label="$t('pay.query.phone')">
+                <el-input type="text" v-model="query.phone"></el-input>
+              </el-form-item>
+            </div>
+
+            <div class="col-md-3 col-xs-12">
+              <el-form-item :label="$t('pay.query.tradeSource')">
+                <el-select v-model="query.payMethod">
+                  <el-option
+                    v-for="item in payMethods"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3 col-xs-12"></div>
+            <div class="col-md-3 col-xs-12"></div>
+            <div class="col-md-3 col-xs-12"></div>
+            <div class="col-md-3 col-xs-12">
+              <el-button class="pull-right" type="primary" :loading="loading" @click="handleQuery">{{ $t('pay.query.query') }}</el-button>
+              <el-button class="pull-right magin-r-10" type="warning" @click="resetQuery" :plain="true">{{ $t('common.resetQuery') }}</el-button>
+            </div>
+          </div>
+        </el-form>
+      </div>
+
+      <div class="box box-solid">
+        <div class="box-body">
+          <el-table v-loading="loading" :data="computedPayLogs" border style="width: 100%">
+            <el-table-column prop="id" :label="$t('pay.table.id')" width="60"></el-table-column>
+            <el-table-column prop="createAtString" :label="$t('pay.table.createAt')" width="140"></el-table-column>
+            <el-table-column prop="countryName" :label="$t('pay.table.countryName')" width="100"></el-table-column>
+            <el-table-column prop="phoneString" :label="$t('pay.table.phone')" width="150">
+              <template slot-scope="scope">
+                <a :href="'/user/payment?phone=' + scope.row.phone" target="_blank">{{scope.row.phoneString}}</a>
+              </template>
+            </el-table-column>
+            <el-table-column prop="statementNo" :label="$t('pay.table.statementNo')" width="150">
+              <template slot-scope="scope">
+                <a :href="'/user/payment?statementNo=' + scope.row.statementNo" target="_blank">{{scope.row.statementNo}}</a>
+              </template>
+            </el-table-column>
+            <el-table-column prop="payMethodString" :label="$t('pay.table.tradeSource')" width="80"></el-table-column>
+            <el-table-column prop="errorInfo" :label="$t('pay.table.errorInfo')"></el-table-column>
+          </el-table>
+
+          <div class="row text-center">
+            <div class="col-md-12">
+              <el-pagination
+                layout="total, prev, pager, next"
+                :total="page.count"
+                :page-size="page.per"
+                :current-page="page.current"
+                @current-change="handleCurrentChange"
+                ></el-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import api from '../../api'
+import moment from 'moment'
+import Mixins from '../../mixins/index.js'
+
+export default {
+  mixins: [Mixins.country, Mixins.query],
+  created() {
+    const { startDate, endDate, startTimestamp, endTimestamp } = this.getDefaultDate();   // query.js
+    this.createdAt = [startDate, endDate];
+    this.query.startTime = startTimestamp;
+    this.query.endTime = endTimestamp;
+  },
+  mounted() {
+    api.getPayLogList(this, this.query);
+    api.getPayMethod(this).then(() => {
+      this.payMethods.unshift({id: null, name: this.$t('pay.js.all')});
+      this.payMethods = this.payMethods.filter((item, index) => {
+        if(item.name == 'adyen') {
+          return item.id = 2;
+        }
+        else if(item.name == 'paypal') {
+          return item.id = 1;
+        }
+        else {
+          return item;
+        }
+      });
+    });
+  },
+  data() {
+    return {
+      loading: false,
+      paylogs: [],
+      createdAt: null,
+      query: {
+        countryId: null,
+        startTime: null,
+        endTime: null,
+        phone: null,
+        payMethod: null
+      },
+      page: {
+        count: 0
+      },
+      areaOptions: this.getAreaOptions(),
+      payMethods: []
+    }
+  },
+  computed: {
+    computedPayLogs() {
+      return this.paylogs.map((item) => {
+        return {
+          ...item,
+          phoneString: item.phone ? ((item.code ? ('+' + item.code) : '') + ' ' + item.phone): '',
+          createAtString: item.createdAt ? moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss") : "",
+        }
+      })
+    }
+  },
+  methods: {
+    handleQuery() {
+      this.query.pageNum = 1;
+      api.getPayLogList(this, this.query);
+    },
+    handleCurrentChange(val) {
+      if(!this.loading) {
+        this.query.pageNum = val;
+        api.getPayLogList(this, this.query);
+      }
+    },
+    handleCreatedAt(datas) {
+      if(datas) {
+        this.query.startTime = datas[0].getTime();
+        this.query.endTime = datas[1].getTime();
+      } else {
+        this.query.startTime = '';
+        this.query.endTime = '';
+      }
+    },
+  }
+}
+</script>

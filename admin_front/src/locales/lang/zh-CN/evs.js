@@ -1,0 +1,100 @@
+export default {
+  evsUser: {
+    table: {
+      name: '昵称',
+      countryName: '国家',
+    }
+  },
+  evsOrder: {
+    query: {
+      title: '订单管理',
+      startDate: '开始时间',
+      endDate: '结束时间',
+      phone: '下单人手机号',
+      recipientMobileNumber: '收货人手机号',
+      orderNo: '订单编号',
+      orderStatus: '订单状态',
+      countryId: '收货人国家',
+      payMethod: '支付方式',
+    },
+    table: {
+      id: 'ID',
+      countryName: '收货人国家',
+      createdAt: '下单时间',
+      phone: '下单人手机号',
+      mobileNumber: '收货人手机号',
+      orderNo: '订单编号',
+      orderStatus: '订单状态',
+      orderStatusDeposit: '定金支付状态',
+      orderStatusLeftPart: '尾款支付状态',
+    },
+    js: {
+      orderStatus0: '未支付',
+      orderStatus1: '支付完成',
+      orderStatus2: '支付中',
+      orderStatus3: '出库',
+      payMethod1: '信用卡',
+      payMethod2: '其他',
+      orderStatusDeposit0: '未支付',
+      orderStatusDeposit1: '支付完成',
+      orderStatusDeposit2: '支付中',
+      orderStatusDeposit3: '支付失败',
+      orderStatusLeftPart0: '未支付',
+      orderStatusLeftPart1: '支付完成',
+      orderStatusLeftPart2: '支付中',
+      orderStatusLeftPart3: '支付失败',
+    }
+  },
+  evsPayway: {
+    form: {
+      title: '支付方式设置',
+      title1: '抢购设置',
+      save: '保存',
+      paramCode1: '%',
+      paramCode2: '辆',
+      paramCodeLabel1: '实时开卖进度',
+      paramCodeLabel2: '当天开卖数量',
+    }
+  },
+  evsOrderDetail: {
+    info: {
+      name: '订单信息',
+      orderNo: '订单编号',
+      orderStatus: '订单状态',
+      createdAt: '下单时间',
+      pay: '支付',
+      deposit: '定金',
+      payTime: '支付时间',
+      payMethod: '支付方式',
+      amount: '支付金额',
+      statementNo: '支付单号',
+      payStatus: '支付状态',
+      leftPart: '尾款',
+      walletAddress: '钱包地址',
+      tradeNo: '交易单号',
+      receivedInfo: '收货信息',
+      recipientName: '收货人',
+      mobileNumber: '收货人手机号',
+      countryName: '国家',
+      cityName: '城市',
+      stateName: '省份',
+      homeAddress: '收货地址',
+      postalCode: '邮编',
+      goodsInfo: '商品信息',
+      earlyBirdPrice: '商品总价',
+      goodsContent: '商品内容',
+      remark: '备注',
+    },
+    js: {
+      payMethod1: 'adyen',
+      payMethod2: 'OCN',
+      payMethod3: 'BTC',
+      payMethod4: 'ETH',
+      payStatus0: '未支付',
+      payStatus1: '支付完成',
+      payStatus2: '支付中',
+      payStatus3: '支付失败',
+    }
+  }
+
+}
