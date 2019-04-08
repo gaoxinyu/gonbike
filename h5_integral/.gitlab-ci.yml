@@ -1,0 +1,9 @@
+stages:
+    - debug
+
+pullCode:
+    stage: debug
+    only:
+        - develop
+    script:
+        sh /debugDeployH5.sh
